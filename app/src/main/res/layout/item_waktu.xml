@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/text_view_waktu_alarm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/text_view_ganti"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="#C3EEAC"
+            android:gravity="center"
+            android:text="GANTI"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/text_view_hapus"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="#EEA5A5"
+            android:gravity="center"
+            android:text="HAPUS"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
