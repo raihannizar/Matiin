@@ -9,10 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SetWaktuAlarmActivity"></activity>
-        <!--<activity android:name=".PembukaKuesionerActivity">-->
+        <activity android:name=".Splash" android:theme="@android:style/Theme.Holo.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".MainActivity">
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SetWaktuAlarmActivity" /> <!-- <activity android:name=".PembukaKuesionerActivity"> -->
+        <activity android:name=".MainActivity" android:label='List Alarm'>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,12 +25,11 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlarmReceiver"/>
+        <receiver android:name=".AlarmReceiver" />
 
-        <service android:name=".RingtonePlayingService"
-            android:enabled="true">
-        </service>
-
+        <service
+            android:name=".RingtonePlayingService"
+            android:enabled="true"></service>
     </application>
 
 </manifest>
