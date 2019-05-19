@@ -2,13 +2,19 @@ package id.psbokelompok7.matiin;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,41 +28,59 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Basic View
     private Button buttonTambahWaktuAlarm;
+    private Button buttonMatikanWaktuAlarm;
     private ArrayList<ItemWaktu> mCardWaktu;
     private String waktuAlarmBaru;
+
+    //Usable variables
     private int currentPosition;
     private int positionSP;
+    private int buttonVisibleConst;
     Calendar calendar = Calendar.getInstance();
 
+    //Recycle View
     private RecyclerView mRecyclerView;
     private CardWaktuAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    //Alarm Manager
     private PendingIntent pendingIntent;
     AlarmManager alarmManager;
+
+    //Animasi
+    Animation toVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        registerReceiver(broadcastReceiver, new IntentFilter("show button"));
 
         loadStateCardWaktu();   //Load keadaan terbaru.
         buildCardWaktu();
-        setButtonTambahWaktuAlarm();
-        gantiCardWaktu();       //Ganti isi Card Waktu.
+        setViewUtama();
+        gantiCardWaktu();       //Ganti isi Card Waktu dengan waktu yang di-set.
         setWaktuAlarm();
 
-
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {        //Terima broadcast munculkan tombol MATIKAN kalo alarm nyala.
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            buttonVisibleConst = getIntent().getExtras().getInt("muncul");
+            showButtonMatikanAlarm();
+        }
+    };
 
     public void loadStateCardWaktu() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("current card waktu", null);
         positionSP = sharedPreferences.getInt("current position", 0);
-        Type type = new TypeToken<ArrayList<ItemWaktu>>() {}.getType();
+        Type type = new TypeToken<ArrayList<ItemWaktu>>() {
+        }.getType();
         mCardWaktu = gson.fromJson(json, type);
 
         if (mCardWaktu == null) {
@@ -85,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSetWaktuAlarm() {
-        Intent intent = new Intent(this, SetWaktuAlarmActivity.class);
-        startActivity(intent);
+        Intent intentOpen = new Intent(this, SetWaktuAlarmActivity.class);
+        startActivity(intentOpen);
     }
 
     private void gantiCardWaktu() {
@@ -99,15 +123,29 @@ public class MainActivity extends AppCompatActivity {
     private void setWaktuAlarm() {
         if (getIntent().getExtras() != null) {
             Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+            intentAlarm.putExtra("alarm is...", "on");      //Kasih intent alarm on ke Alarm Reciever
 
-            // Get the alarm manager service
-            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);      // Get the alarm manager service
 
-            calendar = (Calendar) getIntent().getSerializableExtra("calendar");
+            calendar = (Calendar) getIntent().getSerializableExtra("calendar");     //Ambil extra calendar.
             pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
             Toast.makeText(getApplicationContext(), "alarm di-set", Toast.LENGTH_SHORT).show();
         }
+    }
+
+//    public void matikanWaktuAlarm() {
+//        alarmManager.cancel(pendingIntent);
+//    }
+
+    private void showButtonMatikanAlarm() {
+        buttonMatikanWaktuAlarm.setVisibility(buttonVisibleConst);
+        buttonMatikanWaktuAlarm.startAnimation(toVisible);
+    }
+
+    public void openDialogSoal() {
+        DialogSoal exampleDialog = new DialogSoal();
+        exampleDialog.show(getSupportFragmentManager(), "dialog soal");
     }
 
     private void buildCardWaktu() {
@@ -134,12 +172,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setButtonTambahWaktuAlarm() {
+    private void setViewUtama() {
+        toVisible = AnimationUtils.loadAnimation(this, R.anim.to_visible_animation);
         buttonTambahWaktuAlarm = findViewById(R.id.button_tambah_waktu_alarm);
+        buttonMatikanWaktuAlarm = findViewById(R.id.button_matikan_waktu_alarm);
+
         buttonTambahWaktuAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tambahWaktuAlarm();
+            }
+        });
+
+        buttonMatikanWaktuAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialogSoal();
             }
         });
     }

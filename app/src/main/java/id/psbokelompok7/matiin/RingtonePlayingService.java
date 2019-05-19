@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 public class RingtonePlayingService extends Service {
 
-    //    @androidx.annotation.Nullable
     MediaPlayer ringtoneAlarm;
 
     @Override
@@ -18,11 +17,13 @@ public class RingtonePlayingService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("local service", "recieved start id" + startId + ":" + intent);
+        Log.i("local service", "received start id" + startId + ":" + intent);
         Log.e("nyala", "gan");
 
-        //buat media player
+        //Buat media player
         ringtoneAlarm = MediaPlayer.create(this, R.raw.ipb8it);
+        ringtoneAlarm.setVolume(1f, 1f);
+        ringtoneAlarm.setLooping(true);
         ringtoneAlarm.start();
 
         return START_NOT_STICKY;
