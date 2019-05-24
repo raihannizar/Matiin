@@ -13,6 +13,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         context.startService(intentRingtone);       //Start ringtone service
 
         context.sendBroadcast(showButtonMatikanAlarm());        //Kirim intent kalo alarm nyala munculin tombol "matikan alarm".
+
     }
 
     private Intent showButtonMatikanAlarm() {

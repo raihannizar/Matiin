@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,11 +25,12 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     //Basic View
-    private Button buttonTambahWaktuAlarm;
+    public Button buttonTambahWaktuAlarm;
     private Button buttonMatikanWaktuAlarm;
     private ArrayList<ItemWaktu> mCardWaktu;
     private String waktuAlarmBaru;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     //Animasi
     Animation toVisible;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {        //Terima broadcast munculkan tombol MATIKAN kalo alarm nyala.
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        //Terima broadcast munculkan tombol MATIKAN kalo alarm nyala.
         @Override
         public void onReceive(Context context, Intent intent) {
             buttonVisibleConst = getIntent().getExtras().getInt("muncul");
@@ -189,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 openDialogSoal();
             }
+
         });
     }
+
 }
