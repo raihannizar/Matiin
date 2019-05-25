@@ -32,6 +32,9 @@ Saat alarm berbunyi, pop-up akan ditampilkan untuk dijawab tantangan matematikan
 ## Class Diagram
 ![Alt text](https://github.com/raihannizar/Matiin/blob/master/ClassDiagram.png)
 
+## Swimlane Diagram
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/Swimlane%20Diagram%20Alarm%20Challenge%20editet.jpg)
+
 ## Developers
 
 - [RaihanNizar](github.com/raihannizar)
