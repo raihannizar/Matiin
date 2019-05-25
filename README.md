@@ -27,7 +27,7 @@ Disini pengguna dapat memilih waktu sesukanya untuk bangun. Disini ringtone alar
 Saat alarm berbunyi, pop-up akan ditampilkan untuk dijawab tantangan matematikanya untuk mematikan alarm. Pengguna harus menjawab dengan benar supaya alarmnya mati.
 
 ## Use Case Diagram
-![Alt text](https://github.com/raihannizar/Matiin/blob/master/Use%20Case.png)
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/Use%20Case(1).png)
 
 ## Class Diagram
 ![Alt text](https://github.com/raihannizar/Matiin/blob/master/ClassDiagram.png)
