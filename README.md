@@ -29,6 +29,9 @@ Saat alarm berbunyi, pop-up akan ditampilkan untuk dijawab tantangan matematikan
 ## Use Case Diagram
 ![Alt text](https://github.com/raihannizar/Matiin/blob/master/Use%20Case.png)
 
+## Class Diagram
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/ClassDiagram.png)
+
 ## Developers
 
 - [RaihanNizar](github.com/raihannizar)
