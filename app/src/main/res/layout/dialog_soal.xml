@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edit_text_jawaban"
         android:layout_marginTop="5dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:text="OK"
         android:textColor="@android:color/white" />
 </RelativeLayout>
