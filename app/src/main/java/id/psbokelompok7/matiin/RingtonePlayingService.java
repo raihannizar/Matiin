@@ -2,10 +2,11 @@ package id.psbokelompok7.matiin;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class RingtonePlayingService extends Service {
 
@@ -17,20 +18,38 @@ public class RingtonePlayingService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("local service", "received start id" + startId + ":" + intent);
-        Log.e("nyala", "gan");
 
-        //Buat media player
-        ringtoneAlarm = MediaPlayer.create(this, R.raw.ipb8it);
-        ringtoneAlarm.setVolume(1f, 1f);
-        ringtoneAlarm.setLooping(true);
-        ringtoneAlarm.start();
+        //Fetch kondisi alarm dari AlarmReceiver.
+        String alarmState = intent.getStringExtra("alarm is");
+
+//        SharedPreferences sharedPreferences = getSharedPreferences("SP_ALARM_STATE", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString("alarm state", alarmState);
+//        editor.apply();
+
+//        context.sendBroadcast(intentShowButtonMatikan);        //Kirim intent kalo alarm nyala munculin tombol "MATIIN!".
+
+        //Alarm "on", ringtone nyala. Alarm "off", ringtone matiin.
+        switch (alarmState) {
+            case "on":
+                ringtoneAlarm = MediaPlayer.create(this, R.raw.ipb8it);
+                ringtoneAlarm.setVolume(0.3f, 0.3f);
+                ringtoneAlarm.setLooping(true);
+                ringtoneAlarm.start();
+                break;
+            case "off":
+                ringtoneAlarm.stop();
+                ringtoneAlarm.reset();
+                break;
+            default:
+                break;
+        }
 
         return START_NOT_STICKY;
     }
 
     public void onDestroy() {
-        Toast.makeText(getApplicationContext(), "on destroy called", Toast.LENGTH_SHORT).show();
+        Log.e("onDestroy", "called");
     }
 
 }

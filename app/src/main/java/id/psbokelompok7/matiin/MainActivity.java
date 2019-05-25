@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,12 +25,11 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DialogSoal.DialogSoalListener{
 
     //Basic View
-    public Button buttonTambahWaktuAlarm;
+    private Button buttonTambahWaktuAlarm;
     private Button buttonMatikanWaktuAlarm;
     private ArrayList<ItemWaktu> mCardWaktu;
     private String waktuAlarmBaru;
@@ -38,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     //Usable variables
     private int currentPosition;
     private int positionSP;
-    private int buttonVisibleConst;
     Calendar calendar = Calendar.getInstance();
+    String buttonVisibility;
 
     //Recycle View
     private RecyclerView mRecyclerView;
@@ -52,29 +51,43 @@ public class MainActivity extends AppCompatActivity {
 
     //Animasi
     Animation toVisible;
-
-
+    Animation toGone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        registerReceiver(broadcastReceiver, new IntentFilter("show button"));
+        registerReceiver(broadcastReceiver, new IntentFilter("anim button"));
 
         loadStateCardWaktu();   //Load keadaan terbaru.
         buildCardWaktu();
         setViewUtama();
         gantiCardWaktu();       //Ganti isi Card Waktu dengan waktu yang di-set.
         setWaktuAlarm();
+//        setButtonAction();
 
     }
 
+    //Terima broadcast munculkan tombol 'MATIIN' kalo alarm nyala.
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        //Terima broadcast munculkan tombol MATIKAN kalo alarm nyala.
         @Override
         public void onReceive(Context context, Intent intent) {
-            buttonVisibleConst = getIntent().getExtras().getInt("muncul");
-            showButtonMatikanAlarm();
+            if (getIntent().getExtras() != null) {
+//                buttonVisibility = getIntent().getStringExtra("visibility");
+                buttonVisibility = "visible";
+//                Log.e("visibility const", buttonVisibility + "o");
+                switch (buttonVisibility) {
+                    case "visible":
+                        showButtonMatikanAlarm();
+                        break;
+                    case "gone":
+                        hideButtonMatikanAlarm();
+                        break;
+                    default:
+                        //do nothing
+                        break;
+                }
+            }
         }
     };
 
@@ -92,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Simpan keadaan terbaru, dipanggil saat pindah activity.
     public void saveStateCardWaktu() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -124,27 +138,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    private String getStateAlarm() {
+//        SharedPreferences sharedPreferences = getSharedPreferences("SP_ALARM_STATE", MODE_PRIVATE);
+//        String alarmState = sharedPreferences.getString("alarm state", "");
+//        return alarmState;
+//    }
+
     private void setWaktuAlarm() {
         if (getIntent().getExtras() != null) {
             Intent intentAlarm = new Intent(this, AlarmReceiver.class);
-            intentAlarm.putExtra("alarm is...", "on");      //Kasih intent alarm on ke Alarm Reciever
+            intentAlarm.putExtra("alarm is", "on");      //Kasih intent alarm on ke Alarm Reciever
 
             alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);      // Get the alarm manager service
 
             calendar = (Calendar) getIntent().getSerializableExtra("calendar");     //Ambil extra calendar.
             pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            Toast.makeText(getApplicationContext(), "alarm di-set", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getApplicationContext(), "Alarm telah di-set!", Toast.LENGTH_SHORT).show();
         }
     }
 
-//    public void matikanWaktuAlarm() {
-//        alarmManager.cancel(pendingIntent);
+    public void matikanWaktuAlarm() {
+        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+        intentAlarm.putExtra("alarm is", "off");      //Kasih intent alarm off ke Alarm Reciever
+        sendBroadcast(intentAlarm);
+
+        alarmManager.cancel(pendingIntent);
+
+        Toast.makeText(this, "Alarm telah dimatikan!", Toast.LENGTH_SHORT).show();
+    }
+
+    //Menerima constant yang menentukan button harus di-show atau di-hide.
+//    private void setButtonAction() {
+//        switch (getStateAlarm()) {
+//            case "on":
+//                showButtonMatikanAlarm();
+//                break;
+//            case "off":
+//                hideButtonMatikanAlarm();
+//                break;
+//            default:
+//                //do nothing;
+//                break;
+//        }
 //    }
 
     private void showButtonMatikanAlarm() {
-        buttonMatikanWaktuAlarm.setVisibility(buttonVisibleConst);
+        buttonMatikanWaktuAlarm.setVisibility(View.VISIBLE);
         buttonMatikanWaktuAlarm.startAnimation(toVisible);
+        buttonTambahWaktuAlarm.startAnimation(toVisible);
+    }
+
+    private void hideButtonMatikanAlarm() {
+        buttonMatikanWaktuAlarm.setVisibility(View.GONE);
+        buttonMatikanWaktuAlarm.startAnimation(toGone);
+        buttonTambahWaktuAlarm.startAnimation(toGone);
     }
 
     public void openDialogSoal() {
@@ -178,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setViewUtama() {
         toVisible = AnimationUtils.loadAnimation(this, R.anim.to_visible_animation);
+        toGone = AnimationUtils.loadAnimation(this, R.anim.to_gone_animation);
         buttonTambahWaktuAlarm = findViewById(R.id.button_tambah_waktu_alarm);
         buttonMatikanWaktuAlarm = findViewById(R.id.button_matikan_waktu_alarm);
 
@@ -193,8 +243,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 openDialogSoal();
             }
-
         });
     }
-
 }

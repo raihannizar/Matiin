@@ -1,7 +1,8 @@
 package id.psbokelompok7.matiin;
 
-
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -16,90 +17,117 @@ import java.util.Random;
 
 
 public class DialogSoal extends AppCompatDialogFragment {
+    //Bikin listener buat nyambungin fungsi matikanWaktuAlarm ke dialog.
+    DialogSoalListener listener;
+
+    //Basic View
+    TextView textViewPertanyaan;
+    EditText editTextJawaban;
+    Button buttonOK;
+
+    //Variabel untuk soal.
+    char operatorArray[];
+    int angkaPertama;
+    int angkaKedua;
+    int jawaban;
+    Random rand = new Random();
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_soal, null);
 
-        LayoutInflater inflater= getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.framesoal,null);
-        TextView question = (TextView) view.findViewById(R.id.textView);
-        final EditText answer =  view.findViewById(R.id.edit_text);
-        Button ok = (Button) view.findViewById(R.id.button);
-        //menampulkan dialog
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        //deklarasikan operasi yang dikeluarkan dalam dialog tersebut
-        char operator[]={'+','-','*'};
-        //lakukan keluaran secara acak
-        Random question1 = new Random();
-        char operasi = operator[question1.nextInt(3 - 0) + 0];
+        textViewPertanyaan = view.findViewById(R.id.text_view_pertanyaan);
+        editTextJawaban = view.findViewById(R.id.edit_text_jawaban);
+        buttonOK = view.findViewById(R.id.button_ok);
 
-        Random question2 = new Random();
-        int tanya1 = question2.nextInt(10 - 1) + 1;
+        //Set pertanyaan ketika dialog dibuat.
+        setPertanyaan();
 
-        Random question3 = new Random();
-        int tanya2 = question3.nextInt(10 - 1) + 10;
-        // variabel tanya3 di set 0 sebagai jawaban
-        int tanya3=0;
+        //Tombol OK diklik, verifikasi jawaban
+        buttonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                verifikasiJawaban();
+            }
+        });
 
-        switch(operasi)
-        {
+        //Build dialog
+        builder.setTitle("Pertanyaan")
+                .setView(view);
+
+        return builder.show();
+    }
+
+    //Fungsi untuk nyambungin listener ke fungsi yang diinginkan.
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (DialogSoalListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() +
+                    "must implement DialogSoalListener");
+        }
+    }
+
+    //Interface listener-nya.
+    public interface DialogSoalListener {
+
+        //Fungsi matiin alarm dari MainActivity.
+        void matikanWaktuAlarm();
+    }
+
+    private void setPertanyaan() {
+        //Deklarasikan operasi yang dikeluarkan dalam dialog tersebut.
+        operatorArray = new char[]{'+', '-', '*'};
+
+        //Lakukan keluaran secara acak.
+        char operator = operatorArray[rand.nextInt(3)];
+        angkaPertama = rand.nextInt(10) + 19;
+        angkaKedua = rand.nextInt(10) + 10;
+
+        //Generate operasi
+        switch (operator) {
             case '+':
-                tanya3 = tanya1 + tanya2;
+                jawaban = angkaPertama + angkaKedua;
                 break;
             case '-':
-                tanya3 = tanya1 - tanya2;
+                jawaban = angkaPertama - angkaKedua;
                 break;
             case '*':
-                tanya3 = tanya1 * tanya2;
+                jawaban = angkaPertama * angkaKedua;
                 break;
             default:
         }
-        //set untuk jawaban yang benar
-        final String jawaban = String.valueOf(tanya3);
-        question.setText(tanya1+" "+operasi+" "+tanya2+" = ?");
 
-        //apabila tombol ok diklik
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (answer.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Masukkan Jawabanmu.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    //deklarasikan string jawaban2 untuk mendapatkan string jawaban
-                    String jawaban2 = answer.getText().toString();
+        textViewPertanyaan.setText(angkaPertama + " " + operator + " " + angkaKedua + " = ?");
+    }
 
-                    if(jawaban2.equals(jawaban)) {
+    private void verifikasiJawaban() {
+        String stringJawaban = editTextJawaban.getText().toString();
 
-                        // stop the ringtone, masi belum bisa
-                       // Intent intentStop = new Intent(this, AlarmReceiver.class);
-                       /// PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1253, intentStop, 0);
-                       // AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-                       // alarmManager.cancel(pendingIntent);
+        if (stringJawaban.isEmpty()) {
+            Toast.makeText(getContext(), "Masukkan jawabanmu.", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            if (stringJawaban.equals(Integer.toString(jawaban))) {
+                //Panggil fungsi matikanWaktuAlarm melalui listener.
+                listener.matikanWaktuAlarm();
 
-                        //dialog berakhir
-                        dialog.dismiss();
-                    }
-                    else  {
-                        Toast.makeText(getContext(), "Jawabanmu Salah! Ulangi lagi!!", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                //Kirim intent hide button ke MainActivity melalui broadcast. Jalan kalo jawabaan benar.
+                Intent intentHideButtonMatikan = new Intent("anim button");
+                intentHideButtonMatikan.putExtra("visibility", "gone");
+                getContext().sendBroadcast(intentHideButtonMatikan);        //Kirim intent kalo jawaban benar sembunyiin tombol "MATIIN!".
+
+                //Close dialog.
+                getDialog().dismiss();
             }
-        });
-       return builder.create();
+
+            else {
+                Toast.makeText(getContext(), "Jawabanmu salah, ulangi lagi!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
-
-//kodingan lama,sebelum gw edit
-//builder.setTitle("SOAL")
-// .setMessage("Ini soal")
-//.setPositiveButton("JAWAB", new DialogInterface.OnClickListener() {
-// @Override
-// public void onClick(DialogInterface dialogInterface, int i) {
-//                        matikanWaktuAlarm();
-//     Toast.makeText(getContext(), "anggap alarm mati", Toast.LENGTH_SHORT).show();
-//    }
-// });
