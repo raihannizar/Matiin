@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements DialogSoal.Dialog
         setViewUtama();
         gantiCardWaktu();       //Ganti isi Card Waktu dengan waktu yang di-set.
         setWaktuAlarm();
-//        setButtonAction();
 
     }
 
@@ -138,12 +136,6 @@ public class MainActivity extends AppCompatActivity implements DialogSoal.Dialog
         }
     }
 
-//    private String getStateAlarm() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("SP_ALARM_STATE", MODE_PRIVATE);
-//        String alarmState = sharedPreferences.getString("alarm state", "");
-//        return alarmState;
-//    }
-
     private void setWaktuAlarm() {
         if (getIntent().getExtras() != null) {
             Intent intentAlarm = new Intent(this, AlarmReceiver.class);
@@ -169,20 +161,7 @@ public class MainActivity extends AppCompatActivity implements DialogSoal.Dialog
         Toast.makeText(this, "Alarm telah dimatikan!", Toast.LENGTH_SHORT).show();
     }
 
-    //Menerima constant yang menentukan button harus di-show atau di-hide.
-//    private void setButtonAction() {
-//        switch (getStateAlarm()) {
-//            case "on":
-//                showButtonMatikanAlarm();
-//                break;
-//            case "off":
-//                hideButtonMatikanAlarm();
-//                break;
-//            default:
-//                //do nothing;
-//                break;
-//        }
-//    }
+
 
     private void showButtonMatikanAlarm() {
         buttonMatikanWaktuAlarm.setVisibility(View.VISIBLE);
