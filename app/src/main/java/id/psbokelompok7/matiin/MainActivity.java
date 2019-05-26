@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -70,10 +71,8 @@ public class MainActivity extends AppCompatActivity implements DialogSoal.Dialog
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (getIntent().getExtras() != null) {
-//                buttonVisibility = getIntent().getStringExtra("visibility");
-                buttonVisibility = "visible";
-//                Log.e("visibility const", buttonVisibility + "o");
+            if (intent.getExtras() != null) {
+                buttonVisibility = intent.getStringExtra("visibility");
                 switch (buttonVisibility) {
                     case "visible":
                         showButtonMatikanAlarm();
