@@ -16,14 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SetWaktuAlarmActivity" /> <!-- <activity android:name=".PembukaKuesionerActivity"> -->
-        <activity android:name=".MainActivity" android:label='List Alarm'>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".SetWaktuAlarmActivity" android:label="Set Waktu Alarm"/> <!-- <activity android:name=".PembukaKuesionerActivity"> -->
+        <activity android:name=".MainActivity" android:label="List Alarm"/>
 
         <receiver android:name=".AlarmReceiver" />
 
