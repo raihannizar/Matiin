@@ -14,7 +14,7 @@ Ini merupakan halaman utama dimana pengguna melihat daftar waktu alarm yang tela
 - Tombol "Ganti" untuk menggantikan waktu alarm
 - Tombol "Delete" untuk menghapus waktu alarm 
 
-### Pilih alarm
+### Set Waktu Alarm
 
 Disini pengguna dapat memilih waktu sesukanya untuk bangun.
 
