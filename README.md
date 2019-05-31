@@ -21,13 +21,13 @@ Disini pengguna dapat memilih waktu sesukanya untuk bangun.
 Saat alarm berbunyi, pop-up akan ditampilkan untuk dijawab tantangan matematikanya untuk mematikan alarm. Pengguna harus menjawab dengan benar supaya alarmnya mati.
 
 ## Use Case Diagram
-![Alt text](https://github.com/raihannizar/Matiin/blob/master/Use%20Case(1).png)
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/images/Use%20Case(1).png)
 
 ## Class Diagram
-![Alt text](https://github.com/raihannizar/Matiin/blob/master/ClassDiagram.png)
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/images/ClassDiagram.png)
 
 ## Swimlane Diagram
-![Alt text](https://github.com/raihannizar/Matiin/blob/master/Swimlane%20Diagram%20Alarm%20Challenge%20editet.jpg)
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/images/Swimlane%20Diagram%20Alarm%20Challenge%20editet.jpg)
 
 ## Developers
 
