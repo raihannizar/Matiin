@@ -4,23 +4,17 @@ Matiin! adalah aplikasi alarm simpel dengan tambahan tantangan menyelesaikan mas
 
 ## Fitur
 
-### Pre-use: Pertanyaan singkat
-
-Pertanyaan yang ada:
-1. Waktu rutin pengguna saat bangun. Waktu ini akan digunakan sebagai waktu default saat memilih alarm.
-2. Seberapa sulit pengguna bangun. Jika pengguna mudah untuk bangun, maka level tantangan secara default adalah mudah. Begitu pula jika pengguna sulit bangun atau dapat bangun dengan normal (level sedang).
-
 ### Homepage: List alarm
 
 Ini merupakan halaman utama dimana pengguna melihat daftar waktu alarm yang telah dipilih pengguna, dengan tiap waktunya mempunyai fitur:
 
 - waktu alarm dengan format *12-hour clock*
-- switch untuk menandakan mati atau nyalanya alarm
-- delete untuk menghapus waktu alarm 
+- Tombol "Ganti" untuk menggantikan waktu alarm
+- Tombol "Delete" untuk menghapus waktu alarm 
 
 ### Pilih alarm
 
-Disini pengguna dapat memilih waktu sesukanya untuk bangun. Disini ringtone alarm dapat dipilih sendiri, serta dapat dipilih juga hari apa saja yang ia dapat pilih untuk bangun.
+Disini pengguna dapat memilih waktu sesukanya untuk bangun.
 
 ### Menjawab pertanyaan
 
