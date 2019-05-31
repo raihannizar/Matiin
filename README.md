@@ -4,6 +4,8 @@ Matiin! adalah aplikasi alarm simpel dengan tambahan tantangan menyelesaikan mas
 
 ## Fitur
 
+![Alt text](https://github.com/raihannizar/Matiin/blob/master/images/Screenshots.png)
+
 ### Homepage: List alarm
 
 Ini merupakan halaman utama dimana pengguna melihat daftar waktu alarm yang telah dipilih pengguna, dengan tiap waktunya mempunyai fitur:
